@@ -44,8 +44,8 @@ export const createCurrentWeek = async (userId: number) => {
 
 export const getOrCreateCurrentWeek = async (userId: number) => {
     try {
-        return getCurrentWeek(userId);
+        return await getCurrentWeek(userId);
     } catch (err: any) {
-        if (err.message === 'No week found') return createCurrentWeek(userId);
+        if (err.message === 'No week found') return await createCurrentWeek(userId);
     }
 };

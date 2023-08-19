@@ -3,12 +3,14 @@ import prisma from './db/db';
 import userRouter from './routes/user/user.route';
 import authRouter from './routes/oauth/oauth.route';
 import { timeToWeekId } from './db/weekly_plant/WeeklyPlant';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // middleware
 app.use(urlencoded({ extended: true }));
 app.use(json());
+app.use(cookieParser());
 
 // routers
 app.use('/user', userRouter);
