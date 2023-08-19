@@ -25,4 +25,7 @@ model WeeklyPlant {
 
   weekId        Int
   plantScore    Int           @default(0)
+
+  streak        Int           @default(0)
+  updatedAt     DateTime?
 }

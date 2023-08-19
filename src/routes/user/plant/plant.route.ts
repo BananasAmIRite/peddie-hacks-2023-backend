@@ -38,6 +38,7 @@ plantRouter.get('/current', async (req, res) => {
             plant: {
                 weekId: req.plant?.weekId,
                 score: req.plant?.plantScore,
+                streak: req.plant?.streak,
             },
         })
         .end();
@@ -56,11 +57,22 @@ plantRouter.post('/uploadPlantImage', upload.single('trash'), async (req, res) =
 
     if (!isTrash) return res.status(401).send({ message: 'Could not recognize trash' });
 
+    const lastUpdated = req.plant?.updatedAt?.getTime() ?? 0;
+
     try {
         await prisma.weeklyPlant.update({
             where: { id: req.plant?.id },
             data: {
                 plantScore: (req.plant?.plantScore ?? 0) + 1,
+                streak:
+                    lastUpdated === 0
+                        ? 1
+                        : Date.now() - lastUpdated >= 36 * 60 * 60 * 1000
+                        ? 0
+                        : Date.now() - lastUpdated >= 12 * 60 * 60 * 1000
+                        ? (req.plant?.streak ?? 0) + 1
+                        : req.plant?.streak,
+                updatedAt: new Date(),
             },
         });
 
